@@ -17,3 +17,4 @@ while playing:
         print("더 낮게! ")
     elif user_choice<pc_choice:
         print("더 높게! ")
+        
