@@ -1,0 +1,62 @@
+import sys 
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
+#qt gui사용
+
+ui_path = r"C:\Users\user\Pictures\계산기.ui"# 계산기 ui 불러오기
+form_class = uic.loadUiType(ui_path)[0]
+# ui 바인딩
+
+# 클래스 상속
+class WindowClass(QMainWindow, form_class) : #계산기 ui로 부터 상속받은 윈도우 클래스 생성
+    def __init__(self) :
+        super().__init__() ## 부모 클래스 초기화
+        self.setupUi(self)
+
+        self.btn_C.clicked.connect(self.btn_clicked) ## 각각의 버튼을 클릭하면 함수 발동! 
+        self.btn_number0.clicked.connect(self.btn_clicked)
+        self.btn_number1.clicked.connect(self.btn_clicked)
+        self.btn_number2.clicked.connect(self.btn_clicked)
+        self.btn_number3.clicked.connect(self.btn_clicked)
+        self.btn_number4.clicked.connect(self.btn_clicked)
+        self.btn_number5.clicked.connect(self.btn_clicked)
+        self.btn_number6.clicked.connect(self.btn_clicked)
+        self.btn_number7.clicked.connect(self.btn_clicked)
+        self.btn_number8.clicked.connect(self.btn_clicked)
+        self.btn_number9.clicked.connect(self.btn_clicked)
+        self.btn_result.clicked.connect(self.btn_clicked)
+        self.btn_minus.clicked.connect(self.btn_clicked)
+        self.btn_add.clicked.connect(self.btn_clicked)
+        self.btn_multipy.clicked.connect(self.btn_clicked)
+        self.btn_divide.clicked.connect(self.btn_clicked)
+
+        self.le_view.setEnabled(False) ## 글 입력 안되게 만들어 줌 버튼 비활성화
+        
+        self.text_value = "" ## 클래스 변수 초기화
+        
+    def btn_clicked(self):
+        btn_value = self.sender().text()
+        if btn_value == 'C': ##~42 C 버튼이 눌리면 LEVIEW 텍스트는 0으로, 텍스트 벨류를 빈값으로 초기화
+            print("clear")
+            self.le_view.setText("0")
+            self.text_value = ""
+        elif btn_value == '=':##~49 버튼 =을 누르면 =을 출력하고 결과값을 보여준다, 46 값의 왼쪽 0을 제거한다. 47번 계산된 값을 화면에 출력한다 
+            print("=") 
+            try:
+                resultValue = eval(self.text_value.lstrip("0"))
+                self.le_view.setText(str(resultValue))
+            except:
+                self.le_view.setText("error")
+        else:
+            if btn_value == 'X': ## 숫자나 수식을 입력하면 self.text_value에 더하고 X 버튼이 눌리면*로 변경
+                btn_value = '*'
+            self.text_value = self.text_value + btn_value
+            print(self.text_value)
+            self.le_view.setText(self.text_value)
+
+
+if __name__ == "__main__" : # gui 불러오기
+    app = QApplication(sys.argv) 
+    myWindow = WindowClass() 
+    myWindow.show() 
+    app.exec_()
